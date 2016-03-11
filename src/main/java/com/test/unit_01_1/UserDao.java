@@ -6,11 +6,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public abstract class UserDao {
+public class UserDao {
+	private ConnectionMaker connectionMaker;
 	
+	public UserDao(){
+		connectionMaker= new DConnectionMaker();
+		//상태를 관리하는 것이 아니니깐 한 번만 만들어서 인스턴스 변수에 저장해두고 메소드에서 사용하도록 한다. 
+	}
 	public void add(User user) throws ClassNotFoundException, SQLException{
 		
-		Connection c = getConnection(); //중복코드를 메소드로 만들어서 호출함.
+		Connection c = connectionMaker.makeConnection(); //인터페이스에 정의된 메소드를 사용하므로 클래스가 바뀐다고 해도 메소드 이름이 변경될 걱정은 없다.
 		
 		PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
 		ps.setString(1, user.getId());
@@ -27,8 +32,8 @@ public abstract class UserDao {
 	
 	public User get(String id) throws ClassNotFoundException, SQLException{
 
-		Connection c = getConnection(); //중복코드를 메소드로 만들어서 호출함.
-		
+		Connection c = connectionMaker.makeConnection(); //인터페이스에 정의된 메소드를 사용하므로 클래스가 바뀐다고 해도 메소드 이름이 변경될 걱정은 없다.
+			
 		
 		PreparedStatement ps = c.prepareStatement(
 				"select * from users where id=?");
@@ -50,12 +55,6 @@ public abstract class UserDao {
 		return user;
 	}
 	
-	public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
-		
-		/**
-		 * 수현코드는 제거되고 추상메소드로 바뀌었다. 메소드의 구현은 서브클래스가 한다. 
-		 * 즉, 이 추상메서드를 오버라이드 하는 곳에서 원하는 내용을 적는다는 것!
-		 */
-	
+
 
 }
