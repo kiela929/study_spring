@@ -3,21 +3,44 @@ package com.test.unit_01_1;
 import java.sql.SQLException;
 
 public class UserDaoTest {
-	
+
 	public static void main(String[] args) throws ClassNotFoundException, SQLException{
-		
-		
-		ConnectionMaker connectionMaker = new DConnectionMaker();
-		//UserDao가 사용할 ConnectionMaker 구현 클래스를 결정하고 오브젝트를 만든다. 
-		//즉, 실제 사용할 사람이 어떤 connection을 쓸지 결정하면 되는것! 이것이 제대로 된 의존관계이다. 
-		//이제 사용자가 바뀌었을 때 메인 이외의 코드를 수정하지 않아도 된다
-		//결론: 어떤 회사의 connection을 쓸지의 결정권은 main이 담당하는 것!! 
-		
-		UserDao dao= new UserDao(connectionMaker);
-		/*
-		 * 1. userdao 생성 -> 현재는 D사의 connection을 사용하려고 함 
-		 * 2. 사용할 connectionMaker 타입의 오브젝트 제공.
-		 * 결국 두 오브젝트 사이의 의존관계 설정 효과
+
+
+		UserDao dao= new DaoFactory().userDao();
+		/**
+		 * 이전에는 이 곳에서 어느 회사의 connection을 사용할지 결정 후 오브젝트 생성, 테스트 까지 함께 진행하였지만,
+		 * Factory클래스를 따로 만들어서 오브젝트 생성하는 것을 분리하였다. 
+		 * 그러므로 현재는 실행하는 코드만 존재하는 것이다. 
+		 * 이것은 기능의 분리가 일어난 것이다. 
+		 * 
+		 */
+
+
+		User user= new User();
+		user.setId("phj929");
+		user.setName("Han");
+		user.setPassword("enjoy");
+		dao.add(user);
+
+		System.out.println(user.getId()+"등록성공");
+		User user2 = dao.get(user.getId());
+		System.out.println(user2.getName());
+
+		System.out.println(user2.getPassword());
+
+		System.out.println(user2.getId()+"조회 성공");
+
+
+		/**
+		 * 결과 화면
+		 * 
+		 * D사의 connection입니다.
+		 *	phj929등록성공
+		 *	D사의 connection입니다.
+		 *	Han
+		 *	enjoy
+		 *	phj929조회 성공
 		 */
 
 	}
