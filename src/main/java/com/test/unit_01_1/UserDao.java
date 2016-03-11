@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao {
+public abstract class UserDao {
 	
 	public void add(User user) throws ClassNotFoundException, SQLException{
 		
@@ -50,14 +50,12 @@ public class UserDao {
 		return user;
 	}
 	
-	private Connection getConnection() throws ClassNotFoundException, SQLException{
+	public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
 		
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		Connection c= DriverManager.getConnection(
-				"jdbc:oracle:thin:@localhost:1521:orcl","scott","tiger");
-		
-		return c;
-		
-	}
+		/**
+		 * 수현코드는 제거되고 추상메소드로 바뀌었다. 메소드의 구현은 서브클래스가 한다. 
+		 * 즉, 이 추상메서드를 오버라이드 하는 곳에서 원하는 내용을 적는다는 것!
+		 */
+	
 
 }
