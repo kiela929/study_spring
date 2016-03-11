@@ -9,9 +9,13 @@ import java.sql.SQLException;
 public class UserDao {
 	private ConnectionMaker connectionMaker;
 	
-	public UserDao(){
-		connectionMaker= new DConnectionMaker();
-		//상태를 관리하는 것이 아니니깐 한 번만 만들어서 인스턴스 변수에 저장해두고 메소드에서 사용하도록 한다. 
+	public UserDao(ConnectionMaker connectionMaker){
+		this.connectionMaker=connectionMaker;
+		//userDao를 사용하려면 생성자를 이용해 N사든 D사든 원하는 것으로 만들면 
+		//사용 할 수 있다. 즉, 현재 이 클래스는 어느 회사의 connection을 쓸지에는 관심 없다. 
+		//단지 connection을 쓴다는 것 자체에만 관심있다는 것!! 
+		//어떤것을 사용할지는 클라이언트에게 맡기는 것! 이렇게 해야 의존관계가 제대로 성립된다. 
+
 	}
 	public void add(User user) throws ClassNotFoundException, SQLException{
 		
