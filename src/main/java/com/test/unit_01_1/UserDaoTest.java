@@ -2,19 +2,22 @@ package com.test.unit_01_1;
 
 import java.sql.SQLException;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 public class UserDaoTest {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException{
+		
+		ApplicationContext context =
+				new AnnotationConfigApplicationContext(DaoFactory.class);
+		
 
-
-		UserDao dao= new DaoFactory().userDao();
-		/**
-		 * 이전에는 이 곳에서 어느 회사의 connection을 사용할지 결정 후 오브젝트 생성, 테스트 까지 함께 진행하였지만,
-		 * Factory클래스를 따로 만들어서 오브젝트 생성하는 것을 분리하였다. 
-		 * 그러므로 현재는 실행하는 코드만 존재하는 것이다. 
-		 * 이것은 기능의 분리가 일어난 것이다. 
-		 * 
-		 */
+		UserDao dao= context.getBean("userDao",UserDao.class);
+	/*
+	 * getBean() 메소드는 ApplicationContext가 관리하는 오브젝트를 요청하는 메소드다. 
+	 * 즉, "userDao"는 DaoFactory가 가지고 있는 Bean정보 중 userDao라는 이름을 가진 빈을 가지고 오라는 것이다. 
+	 */
 
 
 		User user= new User();
