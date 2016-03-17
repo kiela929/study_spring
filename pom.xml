@@ -13,7 +13,7 @@
 			<id>mesir-repo</id>
 			<url>http://mesir.googlecode.com/svn/trunk/mavenrepo</url>
 		</repository>
-		<!--                                  -->
+		<!-- -->
 	</repositories>
 	<properties>
 		<java-version>1.6</java-version>
@@ -21,7 +21,16 @@
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
+
 	<dependencies>
+	<!-- jdbc-4.2.5.RELEASE.jar임. 3.0.3 버전은 오류남 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>4.2.5.RELEASE</version>
+		</dependency>
+
+
 		<!-- ojdbc14 -->
 		<dependency>
 			<groupId>com.oracle</groupId>
