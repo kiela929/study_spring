@@ -11,11 +11,9 @@ public class UserDaoTest {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException{
 
-		//		ApplicationContext context =
-		//				new GenericXmlApplicationContext("com/test/unit_01_1/applicationContext.xml");
+				ApplicationContext context =
+						new GenericXmlApplicationContext("com/test/unit_01_1/applicationContext.xml");
 		//applicationContext에서 DaoFactory 대신 xml을 이용하여 빈을 관리하는 방법이다. 
-
-		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
 
 
 		UserDao dao= context.getBean("userDao",UserDao.class);

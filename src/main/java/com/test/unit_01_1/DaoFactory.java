@@ -17,10 +17,6 @@ public class DaoFactory {
 	public DataSource dataSource(){
 		SimpleDriverDataSource dataSource=new SimpleDriverDataSource();
 
-		dataSource.setDriverClass(oracle.jdbc.driver.OracleDriver.class);
-		dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:orcl");
-		dataSource.setUsername("scott");
-		dataSource.setPassword("tiger");
 		
 		return dataSource;
 		

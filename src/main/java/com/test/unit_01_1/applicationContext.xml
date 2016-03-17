@@ -3,10 +3,25 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-		<bean id="connectionMaker" class="com.test.unit_01_1.DConnectionMaker"/>
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<!-- 이렇게 설정해주면, SimpleDriverDataSource 오브젝트는 만들 수 있다. 
+			하지만, 나의 DB 설정 정보(username,password... 등등)는 없다. 
+			그렇다면 이전처럼 property태그와 ref애트리뷰트로 의존할 빈을 넣어주어야한다.
+			그러나 SimpleDriverDataSource오브젝트는 단순 class타입의 오브젝트나 텍스트값이므로
+			property태그와 ref애트리뷰트로 설정할 수 없다.
+			DB정보는 다른 DI처럼 레퍼런스(ref)를 주입하는 것이 아니라, 단순 값(value)를 주입하는 것이기 때문에
+			ref 대신 value 애트리뷰트를 사용한다.  -->
 		
-		<bean id="userDao" class="com.test.unit_01_1.UserDao">
-			<property name="connectionMaker" ref="connectionMaker"/>
+		<property name="driverClass" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
+		<property name="username" value="scott" />
+		<property name="password" value="tiger" />
+		
+		</bean>
+		
+		<bean id="userDao" class="com.test.unit_01_1.UserDao" >
+			<property name="dataSource" ref="dataSource"/>
+			<!-- 위에서 만들어 놓은 커넥션 정보가 설정 된 dataSource 인터페이스를 주입한다.  -->
 		</bean>
 
 
