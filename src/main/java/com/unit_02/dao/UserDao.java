@@ -8,6 +8,8 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import com.unit_02.domain.User;
 
 public class UserDao {
@@ -59,16 +61,22 @@ public class UserDao {
 		
 		ResultSet rs=ps.executeQuery();
 		
-		rs.next();
-		User user = new User();
+		User user =null;
+		
+		if(rs.next()){
+			//만일 데이터가 없을 경우 SQLException이 일어나는 것을 방지하는 것.
+		user = new User();
 		user.setId(rs.getString("id"));
 		user.setName(rs.getString("name"));
 		user.setPassword(rs.getString("password"));
-		
+		}
 		
 		rs.close();
 		ps.close();
 		c.close();
+		
+		if(user==null) throw new EmptyResultDataAccessException(1);
+		//데이터가 없을 경우 다음과 같은 익셉션을 던져줘~
 		
 		return user;
 	}
