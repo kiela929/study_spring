@@ -8,15 +8,35 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.unit_02.domain.User;
 
 
+@RunWith(SpringJUnit4ClassRunner.class) 
+//스프링의 테스트 컨텍스트 프레임워크의 JUnit 확장기능 지정함!
+@ContextConfiguration(locations="/com/unit_02/dao/applicationContext.xml")
+//테스트 컨텍스트가 어떤 applicationContext를 만들지 그 위치지정하기
 
 public class UserDaoTest {
+	
+	@Autowired 
+	private ApplicationContext context;
+	/*
+	 * @Autowired는 스프링의 DI에 사용되는 애노테이션이다.
+	 * 이게 붙은 인스턴스변수가 있으면, 테스트 컨텍스트 프레임워크는
+	 * 변수타입과 일치하는 컨텍스트 내의 빈을 찾는다. 
+	 * 타입이 일치하는 빈이 있으면 인스턴스 변수에 주입해준다. 
+	 * 일반적으로 주입을 위해서는 생성자,수정자 같은 메소드가 있어야했지만
+	 * 이경우는 메소드 없어도 주입 가능하다!!
+	 * 별도의 DI설정도 필요없다. 타입정보에 의해서 자동으로 빈을 가지고오는것!
+	 * 이런 방법을 타입에 의한 자동와이어링이라고 한다.   
+	 */
 
 	private UserDao dao; 
 	private User user1;
@@ -32,13 +52,14 @@ public class UserDaoTest {
 	@Before
 	public void setUp(){
 
-		ApplicationContext context = 
-				new GenericXmlApplicationContext("com/unit_02/dao/applicationContext.xml");
-		this.dao= context.getBean("userDao",UserDao.class); 
+		this.dao= this.context.getBean("userDao",UserDao.class); 
 		
 		this.user1 = new User("moon","김달빛","moonlight");
 		this.user2 = new User("sunny","이햇빛","sunlight");
 		this.user3 = new User("bumjin","박범진","springno3");
+		
+		System.out.println(this.context);
+		System.out.println(this);
 
 	}
 	

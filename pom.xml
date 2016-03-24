@@ -23,8 +23,15 @@
 	</properties>
 
 	<dependencies>
-	
-	<!-- jdbc-4.2.5.RELEASE.jar임. 3.0.3 버전은 오류남 -->
+		<!-- org.springframework.test-3.0.7.release.jar -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>3.0.7.RELEASE</version>
+		</dependency>
+
+
+		<!-- jdbc-4.2.5.RELEASE.jar임. 3.0.3 버전은 오류남 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
