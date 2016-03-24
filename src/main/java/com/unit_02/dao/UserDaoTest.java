@@ -23,24 +23,28 @@ public class UserDaoTest {
 		ApplicationContext context = new GenericXmlApplicationContext("com/unit_02/dao/applicationContext.xml");
 		
 		UserDao dao= context.getBean("userDao",UserDao.class); 
+		User user = new User("moon","김달빛","moonlight");
 		
-		User user= new User();
-		user.setId("moon");
-		user.setName("김달빛");
-		user.setPassword("moonlight");
+		dao.deleteAll();
+		assertThat(dao.getCount(), is(0));
 		
 		dao.add(user);
+		assertThat(dao.getCount(), is(1));
 
 		User user2 = dao.get(user.getId());
 		
 		assertThat(user2.getName(),is(user.getName()));
 		assertThat(user2.getPassword(),is(user.getPassword()));
 		
+		
+		
 	}
 	
 	public static void main(String[] args) {
 		JUnitCore.main("com.unit_02.dao.UserDaoTest");
 		//main에서 junit test를 진행해준다. 
+		//java application 으로 실행시키면 콘솔창에서 결과 확인이 가능.
+		//Junit으로 실행시키면 main의 JUnitCore 코드는 필요없다. IDE 제공으로 확인 가능. 
 	}
 
 	
