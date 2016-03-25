@@ -19,7 +19,7 @@
 		
 		</bean>
 		
-		<bean id="userDao" class="com.unit_02.dao.UserDao" >
+		<bean id="userDao" class="com.unit_03.dao.UserDao" >
 			<property name="dataSource" ref="dataSource"/>
 			<!-- 위에서 만들어 놓은 커넥션 정보가 설정 된 dataSource 인터페이스를 주입한다.  -->
 		</bean>
