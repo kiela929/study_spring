@@ -26,7 +26,7 @@ import com.unit_02.domain.User;
 public class UserDaoTest {
 	
 	@Autowired 
-	private ApplicationContext context;
+	private UserDao dao; 
 	/*
 	 * @Autowired는 스프링의 DI에 사용되는 애노테이션이다.
 	 * 이게 붙은 인스턴스변수가 있으면, 테스트 컨텍스트 프레임워크는
@@ -38,7 +38,7 @@ public class UserDaoTest {
 	 * 이런 방법을 타입에 의한 자동와이어링이라고 한다.   
 	 */
 
-	private UserDao dao; 
+
 	private User user1;
 	private User user2;
 	private User user3;
@@ -52,14 +52,12 @@ public class UserDaoTest {
 	@Before
 	public void setUp(){
 
-		this.dao= this.context.getBean("userDao",UserDao.class); 
+//		this.dao= this.context.getBean("userDao",UserDao.class); 
 		
 		this.user1 = new User("moon","김달빛","moonlight");
 		this.user2 = new User("sunny","이햇빛","sunlight");
 		this.user3 = new User("bumjin","박범진","springno3");
 		
-		System.out.println(this.context);
-		System.out.println(this);
 
 	}
 	
