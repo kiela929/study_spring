@@ -5,8 +5,17 @@
 
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
+		<param-name>ContextClass</param-name>
+		<param-value>
+		org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+		</param-value>
+	</context-param>
+	
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		<param-value>part2.unit_01.dao</param-value>
+		<!-- 만일 하나 이상의 스캔 대상 패키지를 갖고싶다면?
+		공백으로 구분해서 여러개의 패키지 경로를 적어주면 된다! -->
 	</context-param>
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
