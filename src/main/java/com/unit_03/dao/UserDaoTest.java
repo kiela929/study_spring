@@ -19,9 +19,9 @@ import com.unit_03.domain.User;
 
 @RunWith(SpringJUnit4ClassRunner.class) 
 //스프링의 테스트 컨텍스트 프레임워크의 JUnit 확장기능 지정함!
-@ContextConfiguration(locations="/com/unit_03/dao/applicationContext.xml")
-//테스트 컨텍스트가 어떤 applicationContext를 만들지 그 위치지정하기
-
+@ContextConfiguration(locations="../dao/applicationContext.xml")
+/*//테스트 컨텍스트가 어떤 applicationContext를 만들지 그 위치지정하기
+*/
 public class UserDaoTest {
 	
 	@Autowired 
