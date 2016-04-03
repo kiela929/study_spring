@@ -4,20 +4,71 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import com.unit_03.template.BufferedReaderCallback;
+
 public class Calculator {
-	
+
 	public Integer calcSum(String filepath) throws IOException{
 		
-		BufferedReader br =new BufferedReader(new FileReader(filepath));
-		//한줄 씩 읽기 편하게 BufferedReader로 파일을 가져온다.
-		Integer sum = 0;
-		String line=null;
-		while((line=br.readLine())!=null){
-			//마지막 라인까지 읽어가면서 숫자를 더한다.
-			sum+=Integer.valueOf(line);
-		}
-		br.close();
-		return sum;
+		BufferedReaderCallback sumCallback=
+				new BufferedReaderCallback() {
+					@Override
+					public Integer doSomethingWithReader(BufferedReader br) throws IOException {
+						Integer sum=0;
+						String line=null;
+						while((line=br.readLine())!=null){
+							sum+=Integer.valueOf(line);
+						}
+						return sum;
+					}
+				};
+
+		return fileReadTemplate(filepath,sumCallback); //템플릿에 콜백을 넣어서 리턴!
+
 	}
 
+	public Integer fileReadTemplate(String filepath,BufferedReaderCallback callback) throws IOException{
+		//템플릿임.
+		//BufferedReaderCallback 는 콜백오브젝트임.
+		BufferedReader br=null;
+
+		try {
+			br=new BufferedReader(new FileReader(filepath));
+			int ret= callback.doSomethingWithReader(br);
+			return ret;
+
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			throw e;
+		}
+		finally{
+			if(br!=null){
+				try {br.close();}
+				catch(IOException e){System.out.println(e.getMessage());}
+			}
+
+		}
+	}
+	
+	
+	public Integer calcMultiply(String filepath)throws IOException{
+		
+		BufferedReaderCallback multiplyCallback=
+				new BufferedReaderCallback() {
+					@Override
+					public Integer doSomethingWithReader(BufferedReader br) throws IOException {
+						Integer multiply=1;
+						String line=null;
+						while((line=br.readLine())!=null){
+							multiply*=Integer.valueOf(line);
+						}
+						return multiply;
+					}
+				};
+
+		return fileReadTemplate(filepath,multiplyCallback); //템플릿에 콜백을 넣어서 리턴!
+
+	}
+	
 }
