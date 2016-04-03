@@ -55,20 +55,11 @@ public class UserDao {
 
 	
 	public void deleteAll() throws SQLException{ //익명내부클래스로 바꾸기!!
-
-		this.jdbcContext.workWithStatementStrategy(
-				new StatementStrategy() { //StatementStrategy는 원래 구현해야할 인터페이스이름.
-					//그러나 익명 내부 클래스는 구현하는 인터페이스를 생성자처럼 사용해서 오브젝트로 만든다!! 
-
-					public PreparedStatement makePreparedStatement(Connection c)
-							throws SQLException {
-
-						return c.prepareStatement("delete from users");
-					}
-
-				});
-
+		
+		this.jdbcContext.executeSql("delete from users");
 	}
+
+
 
 	public int getCount()throws SQLException{
 
