@@ -17,13 +17,19 @@ public class UserDao {
 	private JdbcContext jdbcContext; 
 
 	public void setDataSource(DataSource dataSource){
+		this.jdbcContext=new JdbcContext();
+		this.jdbcContext.setDataSource(dataSource);
 		this.dataSource=dataSource;
+		/*
+		 * jdbcContext를 xml의 빈 설정을 하지 않고, 내부에서 직접 만들어서 사용하는 방법!
+		 * 
+		 * 굳이 인터페이스를 두지 않아도 될 만큼 긴밀한 관계를 갖는 DAO클래스와
+		 * JdbcContext를 어색하게 따로 빈으로 분리하지 않고 내부에서 직접 만들어 사용하면서도
+		 * 다른 오브젝트에 대한 DI를 적용할 수 있다는 점이 장점이다. 
+		 */
 	}
 	
-	public void setJdbcContext(JdbcContext jdbcContext){
-		this.jdbcContext=jdbcContext;
-		//jdbcContext를 DI받자!! 
-	}
+
 	
 	public void add(final User user) throws SQLException{ //익명내부클래스로 바꾸기!!
 
