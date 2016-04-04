@@ -4,38 +4,62 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import com.unit_03.template.BufferedReaderCallback;
+import com.unit_03.template.LineCallback;
 
 public class Calculator {
 
 	public Integer calcSum(String filepath) throws IOException{
-		
-		BufferedReaderCallback sumCallback=
-				new BufferedReaderCallback() {
-					@Override
-					public Integer doSomethingWithReader(BufferedReader br) throws IOException {
-						Integer sum=0;
-						String line=null;
-						while((line=br.readLine())!=null){
-							sum+=Integer.valueOf(line);
-						}
-						return sum;
-					}
-				};
 
-		return fileReadTemplate(filepath,sumCallback); //템플릿에 콜백을 넣어서 리턴!
+		LineCallback sumCallback=
+				new LineCallback() {
+			@Override
+			public Integer doSomethingWithLine(String line, Integer value) {
+				return value+Integer.valueOf(line);
+			}
+		};
+
+		return lineReadTemplate(filepath,sumCallback,0); //템플릿에 콜백을 넣어서 리턴!
 
 	}
 
-	public Integer fileReadTemplate(String filepath,BufferedReaderCallback callback) throws IOException{
-		//템플릿임.
-		//BufferedReaderCallback 는 콜백오브젝트임.
+
+	public Integer calcMultiply(String filepath)throws IOException{
+
+		LineCallback multiplyCallback=
+				new LineCallback() {
+			@Override
+			public Integer doSomethingWithLine(String line, Integer value) {
+				return value*Integer.valueOf(line);
+			}
+		};
+
+		return lineReadTemplate(filepath,multiplyCallback,1); //템플릿에 콜백을 넣어서 리턴!
+
+	}
+
+	
+	public Integer lineReadTemplate(String filepath, LineCallback callback, 
+			int initVal)throws IOException{
+		//새로운 템플릿!!
+		
 		BufferedReader br=null;
 
 		try {
 			br=new BufferedReader(new FileReader(filepath));
-			int ret= callback.doSomethingWithReader(br);
-			return ret;
+			
+			Integer res=initVal;	
+			//요기는 초기화 숫자! 덧셈은 0, 곱셈일땐 1이여야함.
+			
+			String line = null;
+			while((line=br.readLine())!=null){ 
+				// 파일의 각 라인을 루프를 돌면서 가져오는 것도 템플릿이 담당!
+				
+				res=callback.doSomethingWithLine(line, res);
+				//각 라인의 내용을 가지고 계산하는 작업만 콜백한테 준다!
+				//즉, 변화가 있는 부분이니까~~~ 
+				//물론 while이 끝날때까지 계속 콜백을 부를것임.
+			}
+			return res;
 
 
 		} catch (IOException e) {
@@ -51,24 +75,5 @@ public class Calculator {
 		}
 	}
 	
-	
-	public Integer calcMultiply(String filepath)throws IOException{
-		
-		BufferedReaderCallback multiplyCallback=
-				new BufferedReaderCallback() {
-					@Override
-					public Integer doSomethingWithReader(BufferedReader br) throws IOException {
-						Integer multiply=1;
-						String line=null;
-						while((line=br.readLine())!=null){
-							multiply*=Integer.valueOf(line);
-						}
-						return multiply;
-					}
-				};
-
-		return fileReadTemplate(filepath,multiplyCallback); //템플릿에 콜백을 넣어서 리턴!
-
-	}
 	
 }
