@@ -1,5 +1,5 @@
 package com.unit_03.template;
 
-public interface LineCallback {
-	Integer doSomethingWithLine(String line, Integer value);
+public interface LineCallback<T> {
+	Integer doSomethingWithLine(String line, T value);
 }

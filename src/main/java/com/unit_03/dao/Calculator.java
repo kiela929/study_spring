@@ -10,8 +10,8 @@ public class Calculator {
 
 	public Integer calcSum(String filepath) throws IOException{
 
-		LineCallback sumCallback=
-				new LineCallback() {
+		LineCallback<Integer> sumCallback=
+				new LineCallback<Integer>() {
 			@Override
 			public Integer doSomethingWithLine(String line, Integer value) {
 				return value+Integer.valueOf(line);
@@ -25,8 +25,8 @@ public class Calculator {
 
 	public Integer calcMultiply(String filepath)throws IOException{
 
-		LineCallback multiplyCallback=
-				new LineCallback() {
+		LineCallback<Integer> multiplyCallback=
+				new LineCallback<Integer>() {
 			@Override
 			public Integer doSomethingWithLine(String line, Integer value) {
 				return value*Integer.valueOf(line);
@@ -38,8 +38,8 @@ public class Calculator {
 	}
 
 	
-	public Integer lineReadTemplate(String filepath, LineCallback callback, 
-			int initVal)throws IOException{
+	public <T> T lineReadTemplate(String filepath, LineCallback<T> callback, 
+			T initVal)throws IOException{
 		//새로운 템플릿!!
 		
 		BufferedReader br=null;
@@ -47,14 +47,14 @@ public class Calculator {
 		try {
 			br=new BufferedReader(new FileReader(filepath));
 			
-			Integer res=initVal;	
+			T res=initVal;	
 			//요기는 초기화 숫자! 덧셈은 0, 곱셈일땐 1이여야함.
 			
 			String line = null;
 			while((line=br.readLine())!=null){ 
 				// 파일의 각 라인을 루프를 돌면서 가져오는 것도 템플릿이 담당!
 				
-				res=callback.doSomethingWithLine(line, res);
+				res=(T)callback.doSomethingWithLine(line, res);
 				//각 라인의 내용을 가지고 계산하는 작업만 콜백한테 준다!
 				//즉, 변화가 있는 부분이니까~~~ 
 				//물론 while이 끝날때까지 계속 콜백을 부를것임.
