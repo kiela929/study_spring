@@ -9,6 +9,8 @@ import javax.sql.DataSource;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.unit_03.domain.User;
 
@@ -55,7 +57,19 @@ public class UserDao {
 
 
 	public int getCount()throws SQLException{
-
+		
+		return this.jdbcTemplate.query(
+				new PreparedStatementCreator() { //첫번째 콜백, 템플릿으로부터 Connection을 받고 PreparedStatement를 돌려받음.
+			public PreparedStatement createPreparedStatement (Connection con) throws SQLException{
+				return con.prepareStatement("select count(*) from users");
+			}
+		},new ResultSetExtractor<Integer>(){//두 번째 콜백, 템플릿으로부터 ResultSet을 받고 여기서 만들어진 결과를 돌려줌
+			public Integer extractData(ResultSet rs) throws SQLException{
+				rs.next();
+				return rs.getInt(1);
+			}
+		});
+/*
 		Connection c = dataSource.getConnection();
 
 		PreparedStatement ps = c.prepareStatement("select count(*) from users");
@@ -68,7 +82,7 @@ public class UserDao {
 		ps.close();
 		c.close();
 
-		return count;
+		return count;*/
 	}
 
 
