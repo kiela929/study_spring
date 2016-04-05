@@ -8,17 +8,17 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.unit_03.domain.User;
 
 public class UserDao {
 
 	private DataSource dataSource;
-	private JdbcContext jdbcContext; 
+	private JdbcTemplate jdbcTemplate; 
 
 	public void setDataSource(DataSource dataSource){
-		this.jdbcContext=new JdbcContext();
-		this.jdbcContext.setDataSource(dataSource);
+		this.jdbcTemplate=new JdbcTemplate(dataSource);
 		this.dataSource=dataSource;
 		/*
 		 * jdbcContext를 xml의 빈 설정을 하지 않고, 내부에서 직접 만들어서 사용하는 방법!
@@ -34,29 +34,22 @@ public class UserDao {
 	public void add(final User user) throws SQLException{ //익명내부클래스로 바꾸기!!
 
 
-		this.jdbcContext.workWithStatementStrategy(
-				new StatementStrategy() { //익명 내부 클래스는 구현하는 인터페이스를 생성자처럼 이용해서 오브젝트로 만든다. 
-					public PreparedStatement makePreparedStatement(Connection c)
-							throws SQLException {
-
-						PreparedStatement ps =
-								c.prepareStatement("insert into users(id,name,password)values(?,?,?)");
-
-						ps.setString(1, user.getId());
-						ps.setString(2, user.getName());
-						ps.setString(3, user.getPassword());
-
-						return ps;
-					}
-				});
-
+		this.jdbcTemplate.update("insert into users(id,name,password)values(?,?,?)",
+				user.getId(),user.getName(),user.getPassword());
+		/*
+		 * JdbcTemplate를 사용하였기 때문에 각각의 파라메터는 대응되는 값을 적어주면 된다. 
+		 */
+		
 	}
 
 
 	
 	public void deleteAll() throws SQLException{ //익명내부클래스로 바꾸기!!
 		
-		this.jdbcContext.executeSql("delete from users");
+		this.jdbcTemplate.update("delete from users");
+		/*
+		 * JdbcTemplate를 이용하면 update라는 함수를 사용하여 한 줄로 구현이 가능!
+		 */
 	}
 
 
