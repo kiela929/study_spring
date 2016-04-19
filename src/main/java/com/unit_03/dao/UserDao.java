@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.unit_03.domain.User;
 
@@ -91,31 +92,23 @@ public class UserDao {
 	
 	public User get(String id) throws ClassNotFoundException, SQLException{
 		
-		Connection c = dataSource.getConnection();
+		return this.jdbcTemplate.queryForObject("select * from users where id=?",
+				new Object[] {id},//sql에 바인딩할 파라미터 값. 가변인자 대신 배열을 사용한다. 
+				new RowMapper<User>(){//결과 값을 만든 User오브젝트에 매핑해줌!
+			public User mapRow(ResultSet rs, int rowNum)
+				throws SQLException{
+				User user=new User();
+				user.setId(rs.getString("id"));
+				user.setName(rs.getString("name"));
+				user.setPassword(rs.getString("password"));
+				return user;
+			}
+		});
 		
-		PreparedStatement ps = c.prepareStatement(
-				"select * from users where id=?");
-		ps.setString(1,id);
-		
-		ResultSet rs=ps.executeQuery();
-		
-		User user =null;
-		
-		if(rs.next()){
-			//만일 데이터가 없을 경우 SQLException이 일어나는 것을 방지하는 것.
-			user = new User();
-			user.setId(rs.getString("id"));
-			user.setName(rs.getString("name"));
-			user.setPassword(rs.getString("password"));
-		}
-		
-		rs.close();
-		ps.close();
-		c.close();
-		
-		if(user==null) throw new EmptyResultDataAccessException(1);
+//		if(user==null) throw new EmptyResultDataAccessException(1);
 		//데이터가 없을 경우 다음과 같은 익셉션을 던져줘~
+		//이 부분은 기존 템플릿,콜백을 만들었을때 처리해줬던 예외처리이다. 
+		//따로 써주지 않아도 queryForObject()는 데이터가 없을 경우 같은 예외를 던져주니 써줄 필요 없다.  
 		
-		return user;
 	}
 }
